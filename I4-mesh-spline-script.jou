@@ -1,0 +1,23 @@
+chdir pwd
+
+;change pathhere
+;(define fileName "Spline_End-NS.scdoc")
+
+
+;global parameters global min global max growth rate
+size-functions/set-global-controls 0.01 0.02 1.1
+
+; import the cad 
+file/import/cad-geometry yes Spline_End-NS.scdoc mm cad-faceting no
+
+; meshing parameters, change groove spelling as per name selection
+scoped-sizing create boi boi object-faces-and-edges yes no * 0.01 1.1
+scoped-sizing create cu curvature face-zone yes no groove 0.01 0.015 1.1 18
+
+/scoped-sizing compute
+
+; Create the mesh region
+objects/create-new-mesh-object/remesh * , individually
+
+; create volume region
+/objects/volumetric-regions/compute * no

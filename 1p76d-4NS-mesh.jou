@@ -1,0 +1,28 @@
+file/start-transcript outputfile.trn 
+
+file/import/cad-geometry yes 1p76D-4NS.pmdb mm cad-faceting no
+
+size-functions/set-global-controls 0.1 0.2 1.1
+
+scoped-sizing create boi boi object-faces-and-edges yes no * 0.1 1.1
+scoped-sizing create cu curvature face-zone yes no groove 0.1 0.2 1.1 18
+
+/scoped-sizing compute
+
+objects/create-new-mesh-object/remesh * , individually
+
+objects/volumetric-regions/compute zo* no yes
+
+objects/volumetric-regions change-type zo* (zo*) fluid
+
+mesh/poly/controls cell-sizing size-field
+
+mesh/scoped-prisms/create BL-w aspect-ratio 10 1 1.1 zone1p76d-4ns:1p76d-4ns-solid-mesh named-regions , selected-labels wall
+
+mesh/scoped-prisms/create BL-g aspect-ratio 10 1 1.1 zone1p76d-4ns:1p76d-4ns-solid-mesh named-regions , selected-labels groove
+
+mesh/auto-mesh zo* yes scoped pyramids poly no
+
+file write-mesh wBL-mesh.msh
+
+
